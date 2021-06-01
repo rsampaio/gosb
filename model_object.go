@@ -9,11 +9,5 @@
  */
 package gosb
 
-type ServiceInstanceProvisionRequestBody struct {
-	ServiceId string `json:"service_id"`
-	PlanId string `json:"plan_id"`
-	Context *Context `json:"context,omitempty"`
-	OrganizationGuid string `json:"organization_guid"`
-	SpaceGuid string `json:"space_guid"`
-	Parameters *Object `json:"parameters,omitempty"`
+type Object struct {
 }

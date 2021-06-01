@@ -9,11 +9,6 @@
  */
 package gosb
 
-type ServiceInstanceProvisionRequestBody struct {
-	ServiceId string `json:"service_id"`
-	PlanId string `json:"plan_id"`
-	Context *Context `json:"context,omitempty"`
-	OrganizationGuid string `json:"organization_guid"`
-	SpaceGuid string `json:"space_guid"`
-	Parameters *Object `json:"parameters,omitempty"`
+// See [Context Conventions](https://github.com/openservicebrokerapi/servicebroker/blob/master/profile.md#context-object) for more details.
+type Context struct {
 }
