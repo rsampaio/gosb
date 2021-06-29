@@ -22,6 +22,9 @@ type Plan struct {
 	// bindable
 	Bindable bool `json:"bindable,omitempty"`
 
+	// binding rotatable
+	BindingRotatable *bool `json:"binding_rotatable,omitempty"`
+
 	// description
 	// Required: true
 	Description *string `json:"description"`

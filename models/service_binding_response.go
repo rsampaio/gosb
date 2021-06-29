@@ -22,6 +22,9 @@ type ServiceBindingResponse struct {
 	// credentials
 	Credentials interface{} `json:"credentials,omitempty"`
 
+	// endpoints
+	Endpoints []*ServiceBindingEndpoint `json:"endpoints"`
+
 	// metadata
 	Metadata *ServiceBindingMetadata `json:"metadata,omitempty"`
 
@@ -39,6 +42,10 @@ type ServiceBindingResponse struct {
 func (m *ServiceBindingResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateEndpoints(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateMetadata(formats); err != nil {
 		res = append(res, err)
 	}
@@ -50,6 +57,30 @@ func (m *ServiceBindingResponse) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ServiceBindingResponse) validateEndpoints(formats strfmt.Registry) error {
+	if swag.IsZero(m.Endpoints) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Endpoints); i++ {
+		if swag.IsZero(m.Endpoints[i]) { // not required
+			continue
+		}
+
+		if m.Endpoints[i] != nil {
+			if err := m.Endpoints[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -98,6 +129,10 @@ func (m *ServiceBindingResponse) validateVolumeMounts(formats strfmt.Registry) e
 func (m *ServiceBindingResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateEndpoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateMetadata(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -109,6 +144,24 @@ func (m *ServiceBindingResponse) ContextValidate(ctx context.Context, formats st
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ServiceBindingResponse) contextValidateEndpoints(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Endpoints); i++ {
+
+		if m.Endpoints[i] != nil {
+			if err := m.Endpoints[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("endpoints" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
